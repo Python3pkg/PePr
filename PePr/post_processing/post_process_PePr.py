@@ -75,7 +75,7 @@ class ReadData:
         self.input_directory = ''  
 
     def get_read_length(self):
-        return self.read_length_dict.values()[0]
+        return list(self.read_length_dict.values())[0]
 
     def get_filenames(self):
         return self.chip_filename_list + self.input_filename_list
@@ -88,11 +88,11 @@ def main(argv):
     readData = ReadData(opt)
     get_read_length_info(readData)
     readData.read_length = readData.get_read_length()
-    print('read length is {0}'.format(readData.read_length))
+    print(('read length is {0}'.format(readData.read_length)))
     data_dict = {}
 
     for filename in opt.chip+opt.input:
-        print ("reading {0}".format(filename))
+        print(("reading {0}".format(filename)))
         data_dict[filename] = {}
         forward, reverse = parse_file_by_strand[readData.file_format](filename,readData.input_directory)
         for chr in set(forward.keys())&set(reverse.keys()):
@@ -124,7 +124,7 @@ def post_processing(readData, peak, passed, filtered, remove_artefacts=False, na
     removed_count = 0
     for idx,line in enumerate(peak):
         if idx%100 == 0:
-            print ('{0} peaks processed'.format(idx))
+            print(('{0} peaks processed'.format(idx)))
         words = line.strip().split('\t')
         chr = words[0]
         start = int(words[1])
@@ -156,7 +156,7 @@ def post_processing(readData, peak, passed, filtered, remove_artefacts=False, na
         #passed.write(str(chip_input_ratio) + '\t' +
         #                  str(overlap_orig) +
         #                 '\t' + str(overlap_roll) + '\n')
-    print ('Done. {0} out of {1} peaks failed the test and removed'.format(removed_count, idx+1))
+    print(('Done. {0} out of {1} peaks failed the test and removed'.format(removed_count, idx+1)))
     return 
 
 
@@ -233,14 +233,14 @@ def post_processing_per_peak(strands_dict, chip_list, input_list, chr,
         sum_reverse = 0
         if sum(chip_forward) > 0:
             chip_forward = chip_forward/sum(chip_forward)
-            for i in xrange(end-start):
+            for i in range(end-start):
                 sum_forward += chip_forward[i]
                 if sum_forward > 0.2:
                     new_start = start + i
                     break
         if sum(chip_reverse) > 0:
             chip_reverse = chip_reverse/sum(chip_reverse)
-            for i in xrange(end-start-1, -1, -1):
+            for i in range(end-start-1, -1, -1):
                 sum_reverse += chip_reverse[i]
                 if sum_reverse > 0.2:
                     new_end = start + i

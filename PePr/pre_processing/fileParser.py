@@ -11,7 +11,7 @@ def parse_bam_for_f_r(filename, input_dir):
     for line in infile.fetch(until_eof = True):
         num += 1
         if num % 10000000 == 0 :
-            print ("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         if line.is_unmapped is False:
             chr = infile.getrname(line.tid)
             if line.is_reverse is False:
@@ -37,7 +37,7 @@ def parse_sam_for_f_r(filename, input_dir):
     for line in infile:
         num += 1
         if num % 10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         flag = int(words[1])
 
@@ -62,7 +62,7 @@ def parse_bed_for_f_r(filename, input_dir):
         chr,start,end,col3,col4,strand = line.strip().split()
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         pos = int(start)
         if strand == "+":
             try: forward[chr].append(pos)
@@ -91,7 +91,7 @@ def parse_sampe(filename,input_dir):
     for line in infile:
         num += 1
         if num % 10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         name = words[0]
         # if the sequence name has already been processed
@@ -141,7 +141,7 @@ def parse_bampe(filename, input_dir):
     for line in infile.fetch(until_eof = True):
         num += 1
         if num % 1000000 == 0 :
-            print ("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         name = line.query_name
         if name==pre_name and line_saved == True:
             continue

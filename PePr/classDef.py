@@ -213,7 +213,7 @@ class Parameters:
                 raise Exception('Output directory: {0} does not exist'.format(self.output_directory))
         for filename in self.get_filenames():
             if os.path.isfile(self.input_directory+filename) is False:
-                print("File:",self.input_directory+filename, " not found")
+                print(("File:",self.input_directory+filename, " not found"))
                 exit(1)
 
     @staticmethod
@@ -302,7 +302,7 @@ class Parameters:
             
     def print_parameters(self, output_str):
         info("printing running parameters:")
-        print('\n\n'+ output_str + '\n')    
+        print(('\n\n'+ output_str + '\n'))    
         return 
         
     def get_filenames(self):
@@ -327,7 +327,7 @@ class Parameters:
         return sum(self.chr_info.values())
     
     def get_top3_chr(self):
-        values = [i for i in self.chr_info.values()]
+        values = [i for i in list(self.chr_info.values())]
         values.sort()
         values.reverse()
         values_top3 = values[0:3]

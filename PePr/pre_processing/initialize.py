@@ -43,7 +43,7 @@ def get_chr_info_bam(parameter, filename):
     for line in infile.fetch(until_eof=True):
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         if line.is_unmapped is False:
             chr = infile.getrname(line.tid)
             try: 
@@ -65,7 +65,7 @@ def get_chr_info_sam(parameter, filename):
     for line in infile:
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         flag = int(words[1])
     
@@ -85,7 +85,7 @@ def get_chr_info_bed(parameter, filename):
     for line in infile: 
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         chr,start,end,col3,col4,strand = line.strip().split()
         try: 
             chr_info[chr] = max(chr_info[chr], int(start))
@@ -103,7 +103,7 @@ def get_chromosome_info(parameter, chip_filename):
          get_chr_info_sam(parameter, chip_filename)        
     if parameter.file_format == "bed":
          get_chr_info_bed(parameter, chip_filename)
-    message = ' | '.join([str(key)+":"+str(value) for key,value in parameter.chr_info.items()])
+    message = ' | '.join([str(key)+":"+str(value) for key,value in list(parameter.chr_info.items())])
     info("Found "+message)
     return 
 
@@ -115,7 +115,7 @@ def get_read_length_info(parameter):
     if parameter.file_format == "bed":
         get_read_length_from_bed(parameter)
     
-    message = '|'.join([ str(x) for x in parameter.read_length_dict.values()])
+    message = '|'.join([ str(x) for x in list(parameter.read_length_dict.values())])
     info("Read length: "+message)
 
 def get_read_length_from_bam(parameter):

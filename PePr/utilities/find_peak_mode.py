@@ -26,7 +26,7 @@ def parse_sam_for_f_r(filename):
     for line in infile:
         num += 1
         if num % 10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         flag = int(words[1])
 
@@ -53,7 +53,7 @@ def parse_bam_for_f_r(filename):
     for line in infile.fetch(until_eof = True):
         num += 1
         if num % 1000000 == 0 :
-            print ("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         if line.is_unmapped is False:
             chr = infile.getrname(line.tid)
             if line.is_reverse is False:
@@ -77,7 +77,7 @@ def parse_bed_for_f_r(filename):
         chr,start,end,col3,col4,strand = line.strip().split()
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         pos = int(start)
         if strand == "+":
             try: forward[chr].append(pos)
@@ -98,21 +98,21 @@ def cross_cor(f, r):
         #print x
         y = len(numpy.intersect1d(npf+x,npr))
         cor_list.append(y)
-    return range(50,302,2)[cor_list.index(max(cor_list))]
+    return list(range(50,302,2))[cor_list.index(max(cor_list))]
 
 
 def estimate_shift_size(forward,reverse):
     shift_list = []
-    print 'estimating shift size:'
+    print('estimating shift size:')
     for chr in set(forward.keys())&set(reverse.keys()):
-        print chr
+        print(chr)
         chr_f, chr_r = forward[chr], reverse[chr]
         shift_list.append(cross_cor(chr_f, chr_r))
     shift_size = shift_list[len(shift_list)/2]
     return shift_size/2
     
 def shift_reads(forward, reverse,shift):
-    print 'shifting reads'
+    print('shifting reads')
     reads_by_chr = {}
     for chr in set(forward.keys())&set(reverse.keys()):
         chr_f = numpy.array(forward[chr])+shift
@@ -126,7 +126,7 @@ def find_peak_mode(peak_filename, reads_by_chr,frag_size):
     file_out = open(out_filename, 'w')
     for idx,line in enumerate(file_in):
         if idx > 0 and idx % 1000 == 0:
-            print idx, 'peaks processed'
+            print(idx, 'peaks processed')
         words = line.strip().split('\t')
         chr = words[0]
         start = int(words[1])
@@ -149,7 +149,7 @@ def find_peak_mode(peak_filename, reads_by_chr,frag_size):
 def main(argv):
     ''' usage: python find_peak_mode.py Peaks_file read_file file_format'''
     if len(argv) < 4:
-        print '''usage: python find_peak_mode.py Peaks_file read_file file_format'''
+        print('''usage: python find_peak_mode.py Peaks_file read_file file_format''')
         exit(1)
 
     peak_filename = argv[1]

@@ -1,9 +1,9 @@
 ###### you can use this script to estimate shift size for each sample.
 # example: python estimate_shiftSize.py file_format filename
 import sys
-from shiftSize import estimate_shiftsize
-from initialize import get_chromosome_info
-from initialize import get_read_length_info
+from .shiftSize import estimate_shiftsize
+from .initialize import get_chromosome_info
+from .initialize import get_read_length_info
 
 
 class TestParameter:
@@ -19,9 +19,9 @@ class TestParameter:
 
 if __name__ == "__main__":
     parameter = TestParameter(sys.argv)
-    print (sys.argv)
+    print((sys.argv))
     get_chromosome_info(parameter, sys.argv[2])
     get_read_length_info(parameter)
-    print(parameter.chr_info)
+    print((parameter.chr_info))
     estimate_shiftsize(sys.argv[2], parameter)
 

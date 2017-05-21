@@ -22,7 +22,7 @@ def estimate_shiftsizes(parameter):
             parameter.bin_dict[chip] = bin_array
     else: 
         pool = multiprocessing.Pool(parameter.num_procs)
-        p = pool.map_async(estimate_shiftsize_wrapper, zip(parameter.get_chip_filenames(), itertools.repeat(parameter)),1)
+        p = pool.map_async(estimate_shiftsize_wrapper, list(zip(parameter.get_chip_filenames(), itertools.repeat(parameter))),1)
         
         try: results = p.get()
         except KeyboardInterrupt:
@@ -97,7 +97,7 @@ def parse_bed_for_f_r(filename, parameter):
         chr,start,end,col3,col4,strand = line.strip().split()
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         pos = int(start)
         if strand == "+":
             try: forward[chr].append(pos)
@@ -119,7 +119,7 @@ def parse_bam_for_f_r(filename, parameter):
     for line in infile.fetch(until_eof = True):
         num += 1
         if num % 10000000 == 0 :
-            print ("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         if line.is_unmapped is False:
             chr = infile.getrname(line.tid)
             if line.is_reverse is False:
@@ -145,7 +145,7 @@ def parse_sam_for_f_r(filename, parameter):
     for line in infile:
         num += 1
         if num % 10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         flag = int(words[1])
     
@@ -170,5 +170,5 @@ def cross_cor(f, r):
         #print x
         y = len(numpy.intersect1d(npf+x,npr))
         cor_list.append(y)
-    return range(50,302,2)[cor_list.index(max(cor_list))]
+    return list(range(50,302,2))[cor_list.index(max(cor_list))]
  

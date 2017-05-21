@@ -15,7 +15,7 @@ def read_bam(filename, data_dict, parameter):
     for line in infile.fetch(until_eof = True):
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         if line.is_unmapped is False:
             chr = infile.getrname(line.tid)
             if line.is_reverse is False:
@@ -43,7 +43,7 @@ def read_sam(filename,data_dict, parameter):
     for line in infile:
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         flag = int(words[1])
     
@@ -72,7 +72,7 @@ def read_bed(filename, data_dict, parameter):
         chr,start,end,col3,col4,strand = line.strip().split()
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         if strand == "+":
             pos = int(start) + shift_size
         else: 
@@ -150,7 +150,7 @@ def read_files_to_arrays(parameter):
     else:
         pool = multiprocessing.Pool(parameter.num_procs)
 #        p = pool.map_async(read_file_to_array_wrapper, zip(parameter.get_uniq_filenames(), itertools.repeat(parameter)),1)
-        p = pool.map_async(read_file_to_array_wrapper, zip(parameter.get_uniq_filenames(), itertools.repeat(parameter)),1)
+        p = pool.map_async(read_file_to_array_wrapper, list(zip(parameter.get_uniq_filenames(), itertools.repeat(parameter))),1)
         try: results = p.get()
         except KeyboardInterrupt:
             exit(1)

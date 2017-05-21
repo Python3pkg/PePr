@@ -36,7 +36,7 @@ def scale(parameter):
             parameter.lib_size_dict[filename] = line_num
     else:
         pool =  multiprocessing.Pool(parameter.num_procs)
-        p = pool.map_async(get_file_line_counts_wrapper, zip(parameter.get_filenames(), itertools.repeat(parameter)),1)
+        p = pool.map_async(get_file_line_counts_wrapper, list(zip(parameter.get_filenames(), itertools.repeat(parameter))),1)
         try: results = p.get()
         except KeyboardInterrupt:
             exit(1)
@@ -95,7 +95,7 @@ def within_group_tmm(parameter):
     
     else: 
         pool = multiprocessing.Pool(parameter.num_procs)
-        p = pool.map_async(parse_to_bin_wrapper, zip(parameter.get_filenames_wo_bin_dict(), itertools.repeat(bin_size), itertools.repeat(parameter)),1)
+        p = pool.map_async(parse_to_bin_wrapper, list(zip(parameter.get_filenames_wo_bin_dict(), itertools.repeat(bin_size), itertools.repeat(parameter))),1)
         try: results = p.get()
         except KeyboardInterrupt:
             exit(1)
@@ -157,7 +157,7 @@ def between_group_tmm(parameter):
             bin_dict[filename] = parse_to_bin(filename, bin_size, parameter)
     else:
         pool = multiprocessing.Pool(parameter.num_procs)
-        p = pool.map_async(parse_to_bin_wrapper, zip(parameter.get_filenames_wo_bin_dict(), itertools.repeat(bin_size), itertools.repeat(parameter)),1)
+        p = pool.map_async(parse_to_bin_wrapper, list(zip(parameter.get_filenames_wo_bin_dict(), itertools.repeat(bin_size), itertools.repeat(parameter))),1)
         try: results = p.get()
         except KeyboardInterrupt:
             exit(1)
@@ -207,9 +207,9 @@ def chip_tmm(ref, target, rep_rank_sum):
                 n = len_target_not_zero
             else:
                 break
-        ref_n = ref[range(n)]
+        ref_n = ref[list(range(n))]
         ref_n[ref_n==0] = 1
-        target_n = target[range(n)]
+        target_n = target[list(range(n))]
         target_n[target_n==0] = 1
         Mg = numpy.log2(ref_n/target_n)
         Ag = 0.5*numpy.log2(ref_n*target_n)
@@ -274,7 +274,7 @@ def parse_bed_to_bin(filename, bin_size, bin_dict, input_dir):
     for line in infile: 
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         chr,start,end,col3,col4,strand = line.strip().split()
         pos = int(start)           
         try: bin_dict[chr][int(pos/bin_size)] += 1
@@ -289,7 +289,7 @@ def parse_bam_to_bin(filename, bin_size, bin_dict, input_dir):
     for line in infile.fetch(until_eof=True):
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         if line.is_unmapped is False:
             chr = infile.getrname(line.tid)
             try: 
@@ -308,7 +308,7 @@ def parse_sam_to_bin(filename, bin_size, bin_dict, input_dir):
     for line in infile:
         num += 1
         if num %10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         flag = int(words[1])
     
@@ -336,7 +336,7 @@ def parse_sampe_to_bin(filename, bin_size, bin_dict, input_dir):
     for line in infile:
         num += 1
         if num % 10000000 == 0:
-            print("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         words = line.strip().split()
         name = words[0]
         # if the sequence name has already been processed
@@ -390,7 +390,7 @@ def parse_bampe_to_bin(filename, bin_size, bin_dict, input_dir):
     for line in infile.fetch(until_eof = True):
         num += 1
         if num % 10000000 == 0 :
-            print ("{0:,} lines processed in {1}".format(num, filename))
+            print(("{0:,} lines processed in {1}".format(num, filename)))
         name = line.query_name
         if name==pre_name and line_saved == True:
             continue
